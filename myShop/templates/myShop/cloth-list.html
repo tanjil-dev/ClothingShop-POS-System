@@ -1,0 +1,71 @@
+{% extends "myShop/index.html" %}
+{% load static %}
+{% block 'content' %}
+<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Image</th>
+                                            <th>Bar Code</th>
+                                            <th>Company Name</th>
+                                            <th>Discount</th>
+                                            <th>Category</th>
+                                            <th>Edit/Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Image</th>
+                                            <th>Bar Code</th>
+                                            <th>Company Name</th>
+                                            <th>Discount</th>
+                                            <th>Category</th>
+                                            <th>Edit/Delete</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    {% for d in data %}
+                                        <tr>
+                                            <td>{{ d.name }}</td>
+                                            <td>
+                                                <img src="{{ d.image }}" height="250" widht="250">
+                                            </td>
+                                            <td>
+                                                <img src="{{ d.bar_code }}" height="250" widht="250">
+                                            </td>
+                                            <td>{{ d.company_name }}</td>
+                                            <td>
+                                                {% if d.is_discount == True %}
+                                                    <a href="#" class="btn btn-success btn-circle">
+                                                        <i class="fas fa-check"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="#" class="btn btn-warning btn-circle">
+                                                        <i class="fas fa-exclamation-triangle"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ d.category }}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-primary btn-circle">
+                                                    <i class="fa fa-pen"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-circle">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+{% endblock %}
