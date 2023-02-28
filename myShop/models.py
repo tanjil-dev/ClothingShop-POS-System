@@ -37,23 +37,25 @@ class Product(models.Model):
     name = models.CharField(null=True, blank=True, max_length=100)
     image = models.ImageField(null=True, blank=True)
     bar_code = models.ImageField(null=True, blank=True)
+    bar_code_no = models.CharField(max_length=13,blank=True, null=True)
     company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default=None)
-    is_discount = models.BooleanField(default=False)
     category = models.ForeignKey(ClothesCategory, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
+        num = 0
         if not self.bar_code:
             EAN = barcode.get_barcode_class('ean13')
             x = datetime.datetime.now()
             y = x.year + x.month + x.day + x.hour + x.minute + x.second + x.microsecond
             num = 1000000000000 + y
-            ean = EAN('%s'%num, writer=ImageWriter())
+            ean1 = EAN('%s\n %s'% (num, self.name,), writer=ImageWriter())
             buffer = BytesIO()
-            ean.write(buffer)
-            self.bar_code.save('barcode_%s.png'%num, File(buffer), save=False)
+            ean1.write(buffer)
+            self.bar_code.save('barcode_%s.png'% num, File(buffer), save=False)
+            self.bar_code_no = num
             return super().save(*args, **kwargs)
         else:
             return super().save(*args, **kwargs)
@@ -98,4 +100,6 @@ class Sell(models.Model):
     received_amount = models.FloatField(default=0)
     change_amount = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reference_code = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.product.name
