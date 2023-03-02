@@ -50,7 +50,8 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-shopping-bag"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">ANANDA MELA FASHION HOUSE</div>
+            <div class="sidebar-brand-text mx-3">আনন্দ মেলা ফ্যাশন হাউস
+            </div>
         </a>
 
         <!-- Divider -->
@@ -58,7 +59,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="{% url 'pos' %}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>POS</span></a>
         </li>
@@ -109,8 +110,8 @@
             <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     {#                        <h6 class="collapse-header">Custom Components:</h6>#}
-                    <a class="collapse-item" href="buttons.html">Purchase List</a>
-                    <a class="collapse-item" href="cards.html">Add purchase</a>
+                    <a class="collapse-item" href="{% url 'purchase-list' %}">Purchase List</a>
+                    <a class="collapse-item" href="{% url 'create-purchase' %}">Add purchase</a>
                 </div>
             </div>
         </li>
@@ -123,7 +124,8 @@
             <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     {#                        <h6 class="collapse-header">Custom Components:</h6>#}
-                    <a class="collapse-item" href="buttons.html">Add expense</a>
+                    <a class="collapse-item" href="{% url 'expense-list' %}">Expense List</a>
+                    <a class="collapse-item" href="{% url 'create-expense' %}">Add expense</a>
                 </div>
             </div>
         </li>
@@ -136,8 +138,8 @@
             <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     {#                        <h6 class="collapse-header">Custom Components:</h6>#}
-                    <a class="collapse-item" href="buttons.html">Supplier list</a>
-                    <a class="collapse-item" href="buttons.html">Add suppliers</a>
+                    <a class="collapse-item" href="{% url 'supplier-list' %}">Supplier list</a>
+                    <a class="collapse-item" href="{% url 'create-supplier' %}">Add suppliers</a>
                 </div>
             </div>
         </li>
@@ -349,7 +351,8 @@
                                 </div>
                                 <div class="font-weight-bold">
                                     <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.</div>
+                                        problem I've been having.
+                                    </div>
                                     <div class="small text-gray-500">Emily Fowler · 58m</div>
                                 </div>
                             </a>
@@ -361,7 +364,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?</div>
+                                        would you like them sent to you?
+                                    </div>
                                     <div class="small text-gray-500">Jae Chun · 1d</div>
                                 </div>
                             </a>
@@ -373,7 +377,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!</div>
+                                        the progress so far, keep up the good work!
+                                    </div>
                                     <div class="small text-gray-500">Morgan Alvarez · 2d</div>
                                 </div>
                             </a>
@@ -385,7 +390,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...</div>
+                                        told me that people say this to all dogs, even if they aren't good...
+                                    </div>
                                     <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                 </div>
                             </a>

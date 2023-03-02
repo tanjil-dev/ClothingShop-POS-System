@@ -40,6 +40,10 @@ class Product(models.Model):
     bar_code_no = models.CharField(max_length=13,blank=True, null=True)
     company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default=None)
     category = models.ForeignKey(ClothesCategory, on_delete=models.CASCADE, default=None)
+    buying_price = models.FloatField(default=0)
+    selling_price = models.FloatField(default=0)
+    quantity = models.PositiveIntegerField(default=None, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -61,16 +65,6 @@ class Product(models.Model):
             return super().save(*args, **kwargs)
     class Meta:
         db_table = 'product'
-
-class ProductUpdate(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
-    buying_price= models.FloatField(default=0)
-    selling_price = models.FloatField(default=0)
-    quantity = models.PositiveIntegerField(default=None, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'product_update'
 
 class Supplier(models.Model):
     supplier_name = models.CharField(max_length=50)

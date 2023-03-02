@@ -1,0 +1,11 @@
+{% extends "myShop/index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block 'content' %}
+    {% if msg %}
+        <div class="alert alert-success" role="alert">
+            {{ msg }}
+        </div>
+
+    {% endif %}
+{% endblock %}

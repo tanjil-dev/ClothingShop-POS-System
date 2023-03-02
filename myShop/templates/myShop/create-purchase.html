@@ -8,11 +8,10 @@
         </div>
     {% endif %}
     <div class="container">
-    <form style="align-content: center" class="formR" action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" class="btn btn-primary" name="Confirm">
-        <a href="{% url 'purchase-list' %}" class="btn btn-secondary">Back</a>
+        <input type="submit" name="Confirm">
     </form>
     </div>
 {% endblock %}

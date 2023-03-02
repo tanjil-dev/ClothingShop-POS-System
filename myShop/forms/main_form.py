@@ -10,3 +10,17 @@ class SellsForm(forms.ModelForm):
     class Meta:
         model = Sell
         fields = ('__all__')
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = ('__all__')
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = ('__all__')
+
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = ('__all__')
