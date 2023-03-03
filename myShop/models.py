@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files import File
 from barcode.writer import ImageWriter
+from django.core.exceptions import ValidationError
 
 CASH = 'CASH'
 CARD = 'CARD'
@@ -60,6 +61,9 @@ class Product(models.Model):
             ean1.write(buffer)
             self.bar_code.save('barcode_%s.png'% num, File(buffer), save=False)
             self.bar_code_no = num
+            match = Product.objects.filter(bar_code_no__icontains=self.bar_code_no).values()
+            if match:
+                raise ValidationError("Barcode already exist!")
             return super().save(*args, **kwargs)
         else:
             return super().save(*args, **kwargs)
@@ -86,7 +90,6 @@ class Expense(models.Model):
     attached_image = models.ImageField(null=True, blank=True)
 
 class Sell(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.FloatField(default=0)
     discount_amount = models.PositiveIntegerField(default=None, blank=False)
@@ -95,5 +98,9 @@ class Sell(models.Model):
     change_amount = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.product.name
+class SellLog(models.Model):
+    sell = models.ForeignKey(Sell, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = 'sell_log'
