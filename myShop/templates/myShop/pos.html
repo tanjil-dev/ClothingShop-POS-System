@@ -2,11 +2,179 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block 'content' %}
-    {% if msg %}
-        <div class="alert alert-success" role="alert">
-            {{ msg }}
-        </div>
+    <style>
+        .result{
+            background-color: green;
+            color:#fff;
+            padding:20px;
+        }
+        .row{
+            display:flex;
+        }
+        #tab #barcodeTable tfoot tr td{
+            text-align: right;
+        }
+    </style>
+    <script src="{% static 'js/demo/barcode.js' %}"></script>
 
-<script src="{% static 'js/custom/pos.js' %}"></script>
-    {% endif %}
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div  id="reader"></div>
+                <br>
+                <h4>SCAN RESULT</h4>
+                <br>
+                <div id="result">Result Here</div>
+                <br>
+                <input type="button" value="Create PDF"
+                       id="btPrint" onclick="createPDF()" />
+            </div>
+            <div id="tab" class="col-md-8">
+                <table id="barcodeTable" class="table table-bordered border-primary">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Bar Code No.</th>
+                        <th>Selling Price</th>
+                        <th style="display: none">Quantity Available</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5">Total Amount</td>
+                        <td class="total-amount"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Discount Amount</td>
+                        <td class="discount-amount"> <br><input type="text" name="discount-amount" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Total Amount After Discount</td>
+                        <td class="after-discount"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Received Amount</td>
+                        <td class="received-amount"><br><input type="text" name="received-amount" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">Change Amount</td>
+                        <td class="change-amount"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        var search = "{% url 'get-product' %}";
+
+        function onScanSuccess(qrCodeMessage) {
+            var total = 0;
+            document.getElementById('result').innerHTML = '<span class="result">'+qrCodeMessage+'</span>';
+            {#var formData = {bar_code_no: qrCodeMessage}; //Array#}
+            $.ajax({
+                url: search+"?term="+qrCodeMessage,
+                type: "GET", // data type (can be get, post, put, delete)
+                {#data: formData, // data in json format#}
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    var items=[];
+
+                    if(data.quantity > 0) {
+                        $('#barcodeTable tbody tr:last').after('<tr><td class="id-product">' + data.id + '</td> <td>' + data.name + '</td> <td class="barcode-no">' + data.bar_code_no + '</td> <td>' + data.selling_price + '</td> <td style="display: none">' + data.quantity + '</td> </td> <td><input type="text" class="quantity" name="quantity" min="1" value="1" </td> <td class="total">' + data.selling_price + '</td> </tr');
+                        $('#barcodeTable tbody tr .barcode-no').each( function(){
+                            //add item to array
+                            items.push( $(this).text() );
+                            console.log(items)
+                        });
+
+                        var toFindDuplicates = items => items.filter((item, index) => items.indexOf(item) !== index)
+                        var duplicateElementa = toFindDuplicates(items);
+                        console.log(duplicateElementa.length);
+
+                        if (duplicateElementa.length>0)
+                        {
+                            $('#barcodeTable tbody tr:last').empty();
+                            alert("Item Already Inserted")
+                        }
+                        else {
+                            $('#barcodeTable tbody tr .barcode-no').each( function(){
+                            //add item to array
+                            items.push( $(this).text() );
+                            console.log(items)
+                        });
+                        }
+
+                        $('#barcodeTable tbody tr .total').each( function(){
+                            //add item to array
+                            total = total + parseInt($(this).text());
+                            $('#barcodeTable tfoot tr .total-amount').html(total);
+                            $('#barcodeTable tfoot tr .after-discount').html(total);
+                        });
+
+                        console.log(data);
+                        console.log(textStatus);
+                        console.log(jqXHR);
+                    }
+                    else {
+                        alert("Product out of stock")
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR:" + jqXHR);
+                    console.log("TestStatus: " + textStatus);
+                    console.log("ErrorThrown: " + errorThrown);
+                    alert("তথ্য পাওয়া যায়নি");
+                }
+            });
+        }
+
+
+        function onScanError(errorMessage) {
+            //handle scan error
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+        function createPDF() {
+            var sTable = document.getElementById('tab').innerHTML;
+
+            var style = "<style>";
+            style = style + "table {width: 100%;font: 17px Calibri;}";
+            style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+            style = style + "padding: 2px 3px;text-align: center;}";
+            style = style + "</style>";
+
+            // CREATE A WINDOW OBJECT.
+            var win = window.open('', '', 'height=700,width=700');
+
+            win.document.write('<html><head>');
+            win.document.write('<title>Payment Receipt</title>');   // <title> FOR PDF HEADER.
+            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write('<h3 align="center">আনন্দ মেলা ফাশন হাউজ <h3>')
+            win.document.write('<h4 align="center">একতা টাওয়ার, ২য় ঢলা দোকান নং- ২০7, ২১o, ২১8 3 2১৫ কোনাবাড়ৗ,<br> গজীপুর মহানগর ঝাঃ মো: মহসিন ঢালী <br> মোবা: ০১৭১৭-২৬৩০৮১ এবং ০১৯২২৯৯১১৮৮</h4>')
+            win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('</body></html>');
+
+            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+            win.print();    // PRINT THE CONTENTS.
+        }
+
+
+
+    </script>
 {% endblock %}

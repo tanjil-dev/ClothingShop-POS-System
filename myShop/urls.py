@@ -1,6 +1,7 @@
 from django.urls import path
 from myShop.views.home_view import *
 from myShop.views.home_view import *
+from myShop.api.core_api import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,4 +36,7 @@ urlpatterns = [
     path('supplier-list', SupplierList.as_view(), name= 'supplier-list'),
     path('supplier/<str:id>/', SupplierUpdate.as_view(), name= 'supplier-update'),
     path('supplier/<str:id>/', SupplierDelete.as_view(), name= 'supplier-delete'),
+
+    #apis
+    path('get-product/', ProductAPI.as_view(), name='get-product'),
 ]

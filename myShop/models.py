@@ -56,11 +56,11 @@ class Product(models.Model):
             x = datetime.datetime.now()
             y = x.year + x.month + x.day + x.hour + x.minute + x.second + x.microsecond
             num = 1000000000000 + y
-            ean1 = EAN('%s\n %s'% (num, self.name,), writer=ImageWriter())
+            ean1 = EAN('%s'% num, writer=ImageWriter())
             buffer = BytesIO()
             ean1.write(buffer)
-            self.bar_code.save('barcode_%s.png'% num, File(buffer), save=False)
-            self.bar_code_no = num
+            self.bar_code.save('barcode_%s.png'% ean1, File(buffer), save=False)
+            self.bar_code_no = ean1
             match = Product.objects.filter(bar_code_no__icontains=self.bar_code_no).values()
             if match:
                 raise ValidationError("Barcode already exist!")
@@ -98,9 +98,6 @@ class Sell(models.Model):
     change_amount = models.FloatField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class SellLog(models.Model):
-    sell = models.ForeignKey(Sell, on_delete=models.CASCADE)
+class ProductSellLog(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        db_table = 'sell_log'
+    sell = models.ForeignKey(Sell, on_delete=models.CASCADE)
