@@ -7,14 +7,14 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     #product
-    path('', Home.as_view(), name='home'),
+    # path('', Home.as_view(), name='home'),
     path('cloth-list', ClothList.as_view(), name= 'cloth-list'),
     path('create-product', CreateProduct.as_view(), name= 'create-product'),
     path('product-update/<str:id>/', ProductUpdate.as_view(), name= 'product-update'),
     path('product-delete/<str:id>/', ProductDelete.as_view(), name= 'product-delete'),
 
     #sales
-    path('pos', pos.as_view(), name= 'pos'),
+    path('', pos.as_view(), name= 'pos'),
     path('sales-list', SalesList.as_view(), name= 'sales-list'),
     path('sells-update/<str:id>/', SellsUpdate.as_view(), name= 'sells-update'),
     path('sells-delete/<str:id>/', SellsDelete.as_view(), name= 'sells-delete'),
