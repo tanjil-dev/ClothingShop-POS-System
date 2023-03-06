@@ -3,6 +3,7 @@ from myShop.models import *
 from myShop.forms.main_form import *
 from  django.views import View
 from myShop.forms import *
+from myShop.filters import *
 from myShop.services.barcode_service import *
 
 
@@ -333,5 +334,17 @@ class pos(View):
 
         context = {
             'form': form2
+        }
+        return render(request, context=context, template_name=self.template_name)
+
+class PrintBarcode(View):
+    template_name = "myShop/print-barcode.html"
+    def get(self, request):
+        data = Product.objects.all()
+        myFilter = ProductFilter(request.GET, queryset=data)
+        data = myFilter.qs
+        context = {
+            'data': data,
+            'myFilter': myFilter,
         }
         return render(request, context=context, template_name=self.template_name)

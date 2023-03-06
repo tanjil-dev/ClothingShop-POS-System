@@ -11,6 +11,11 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Dashboard</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -84,7 +89,7 @@
                     {#                        <h6 class="collapse-header">Custom Components:</h6>#}
                     <a class="collapse-item" href="{% url 'cloth-list' %}">Clothes List</a>
                     <a class="collapse-item" href="{% url 'create-product' %}">Add Clothes</a>
-                    <a class="collapse-item" href="cards.html">Add/print barcode or label</a>
+                    <a class="collapse-item" href="{% url 'print-barcode' %}">Add/print barcode or label</a>
                 </div>
             </div>
         </li>
@@ -484,6 +489,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
+
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
@@ -503,7 +509,7 @@
 <!-- Page level plugins -->
 <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
 <!-- Page level custom scripts -->
 <script src="{% static 'js/demo/custom.js' %}"></script>
 </body>

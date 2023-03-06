@@ -12,6 +12,7 @@ urlpatterns = [
     path('create-product', CreateProduct.as_view(), name= 'create-product'),
     path('product-update/<str:id>/', ProductUpdate.as_view(), name= 'product-update'),
     path('product-delete/<str:id>/', ProductDelete.as_view(), name= 'product-delete'),
+    path('print-barcode', PrintBarcode.as_view(), name= 'print-barcode'),
 
     #sales
     path('', pos.as_view(), name= 'pos'),
