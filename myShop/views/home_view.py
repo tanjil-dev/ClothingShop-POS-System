@@ -4,7 +4,6 @@ from myShop.forms.main_form import *
 from  django.views import View
 from myShop.forms import *
 from myShop.filters import *
-from myShop.services.barcode_service import *
 
 
 class Home(View):
@@ -318,24 +317,6 @@ class pos(View):
         }
         return render(request, context=context, template_name=self.template_name)
 
-    def post(self, request):
-        global form2
-        data = []
-        if int(request.POST['number']) >=1 and request.POST['number']:
-            form1 = Pos(request.POST)
-            if form1.is_valid():
-                for n in range(form1.cleaned_data['number']):
-                    barcode_num = getBarCodeNumber()
-                    product = Product.objects.filter(bar_code_no=barcode_num).values()
-                    form2 = ProductPosForm(instance=data)
-                    data.append(product)
-        else:
-            form2 = ProductPosForm(request.POST)
-
-        context = {
-            'form': form2
-        }
-        return render(request, context=context, template_name=self.template_name)
 
 class PrintBarcode(View):
     template_name = "myShop/print-barcode.html"

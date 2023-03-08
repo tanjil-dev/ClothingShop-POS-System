@@ -14,4 +14,4 @@ COPY . /clothingStore/
 RUN mkdir /clothingStore/media
 
 COPY clothingStore/.env_docker /clothingStore/clothingStore/.env
-CMD ["python3", "manage.py", "runserver", "localhost:8080"]
+CMD ["python3", "manage.py", "runserver", "localhost:8000"]
