@@ -36,9 +36,7 @@
                 <h4>SCAN RESULT</h4>
                 <br>
                 <div id="result">Result Here</div>
-                <br>
-                <input type="button" value="Sell"
-                       id="btPrint" onclick="createPDF()" />
+
             </div>
             <div id="tab" class="col-md-8">
                 <table id="barcodeTable" class="table table-bordered border-primary">
@@ -74,15 +72,28 @@
                     </tr>
                     <tr>
                         <td colspan="1">Received Amount</td>
-                        <td colspan="1" class="received-amount"><input onkeypress="receivedTotal()" type="text" name="received-amount" value="0"></td>
+                        <td colspan="1" class="received-amount"><input onkeypress="receivedTotal()" type="text" name="received-amount" value="0" required></td>
                         <td colspan="1" class="received-amount-text"></td>
                     </tr>
                     <tr>
                         <td colspan="2">Change Amount</td>
                         <td class="change-amount"></td>
                     </tr>
+                    <tr>
+                        <td colspan="2">Payment Type</td>
+                        <td class="">
+                            <select name="payment_type" class="payment">
+                                <option value="CASH">CASH</option>
+                                <option value="CARD">CARD</option>
+                                <option value="MOBILE BANKING">MOBILE BANKING</option>
+                            </select>
+                        </td>
+                    </tr>
                     </tfoot>
                 </table>
+                <br>
+                <input type="button" value="Sell"
+                       id="btPrint" class="btn btn-success" onclick="createPDF()" />
             </div>
         </div>
     </div>
@@ -98,6 +109,7 @@
         }
 
         var search = "{% url 'get-product' %}";
+        var sell_product = "{% url 'sell-product' %}";
         function discountTotal() {
             $(document).ready(function() {
                 var a = $('#barcodeTable tfoot tr .discount-amount input').val();
@@ -128,83 +140,106 @@
                         });
 
                         var toFindDuplicates = items => items.filter((item, index) => items.indexOf(item) !== index)
-                        {#var duplicateElementa = toFindDuplicates(items);#}
-                        {#console.log(duplicateElementa.length);#}
-                        {##}
-                        {#if (duplicateElementa.length>0)#}
-                        {#{#}
-                        {#    $('#barcodeTable tbody tr:last').empty();#}
-                        {#    alert("Item Already Inserted")#}
-                        {#}#}
-                            {#else {#}
-                            {#    $('#barcodeTable tbody tr .barcode-no').each( function(){#}
-                            {#    //add item to array#}
-                            {#    items.push( $(this).text() );#}
-                            {#    console.log(items)#}
-                            {#});#}
-                                {#}#}
 
-                                    $('#barcodeTable tbody tr .total').each( function(){
-                                        //add item to array
-                                        total = total + parseInt($(this).text());
-                                        $('#barcodeTable tfoot tr .total-amount').html(total);
-                                        $('#barcodeTable tfoot tr .after-discount').html(total);
-                                    });
 
-                                    console.log(data);
-                                    console.log(textStatus);
-                                    console.log(jqXHR);
-                                }
-                            else {
-                                alert("Product out of stock")
-                            }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                console.log("jqXHR:" + jqXHR);
-                                console.log("TestStatus: " + textStatus);
-                                console.log("ErrorThrown: " + errorThrown);
-                                alert("তথ্য পাওয়া যায়নি");
-                            }
+                        $('#barcodeTable tbody tr .total').each( function(){
+                            //add item to array
+                            total = total + parseInt($(this).text());
+                            $('#barcodeTable tfoot tr .total-amount').html(total);
+                            $('#barcodeTable tfoot tr .after-discount').html(total);
                         });
+
+                        console.log(data);
+                        console.log(textStatus);
+                        console.log(jqXHR);
                     }
-
-
-                    function onScanError(errorMessage) {
-                        //handle scan error
+                    else {
+                        alert("Product out of stock")
                     }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR:" + jqXHR);
+                    console.log("TestStatus: " + textStatus);
+                    console.log("ErrorThrown: " + errorThrown);
+                    alert("তথ্য পাওয়া যায়নি");
+                }
+            });
+        }
 
-                    var html5QrcodeScanner = new Html5QrcodeScanner(
-                        "reader", { fps: 10, qrbox: 250 });
-                    html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-                    function createPDF() {
-                        var sTable = document.getElementById('tab').innerHTML;
+        function onScanError(errorMessage) {
+            //handle scan error
+        }
 
-                        var style = "<style>";
-                        style = style + "table {width: 700; font: 17px Calibri;}";
-                        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
-                        style = style + "padding: 2px 3px;text-align: center;}";
-                        style = style + "</style>";
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-                        // CREATE A WINDOW OBJECT.
-                        var win = window.open('', '', 'height=700,width=700');
+        function createPDF() {
+            var sTable = document.getElementById('tab').innerHTML;
 
-                        win.document.write('<html><head>');
-                        win.document.write('<title>Payment Receipt</title>');   // <title> FOR PDF HEADER.
-                        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
-                        win.document.write('</head>');
-                        win.document.write('<body>');
-                        win.document.write('<h3  align="center">ANANDA MELA FASHION HOUSE <h3>')
-                        win.document.write('<h4   align="center">Ekta Tower, 2nd Floor Shop No-207, 210, 218 3 215 Konabari,<br> Gazipur Mahanagar Jh Mohsin Dhali <br> Moba: 01717-263081 and 01922991188</h4>')
-                        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-                        win.document.write('<p class="centered">Thanks for your purchase!</p>');         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-                        win.document.write('</body></html>');
+            var style = "<style>";
+            style = style + "table {width: 700; font: 17px Calibri;}";
+            style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+            style = style + "padding: 2px 3px;text-align: center;}";
+            style = style + "</style>";
 
-                        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+            // CREATE A WINDOW OBJECT.
+            var win = window.open('', '', 'height=700,width=700');
 
-                        win.print();    // PRINT THE CONTENTS.
-                    }
+            win.document.write('<html><head>');
+            win.document.write('<title>Payment Receipt</title>');   // <title> FOR PDF HEADER.
+            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write('<h3  align="center">ANANDA MELA FASHION HOUSE <h3>')
+            win.document.write('<h4   align="center">Ekta Tower, 2nd Floor Shop No-207, 210, 218 3 215 Konabari,<br> Gazipur Mahanagar Jh Mohsin Dhali <br> Moba: 01717-263081 and 01922991188</h4>')
+            win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('<p class="centered">Thanks for your purchase!</p>');         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('</body></html>');
 
+            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+            win.print();    // PRINT THE CONTENTS.
+            sell();
+        }
+
+        function sell(){
+            var product_id=[];
+            var total = $(".total-amount").text();
+            var discount = $(".discount-amount-text").text();
+            var after_discount = $(".after-discount").text();
+            var received_amount = $(".received-amount-text").text();
+            var change_amount = $(".change-amount").text();
+            var payment_type = $(".payment").val();
+            $('#tab #barcodeTable tbody tr .id-product').each( function(){
+                //add item to array
+                id = parseInt($(this).text());
+                product_id.push(id);
+            });
+            var formData = {total: total, discount: discount, after_discount: after_discount, received_amount: received_amount, change_amount: change_amount, payment_type: payment_type, product_id: JSON.stringify(product_id)}; //Array
+                $.ajax({
+                url: sell_product,
+                type: "POST", // data type (can be get, post, put, delete)
+                data: formData, // data in json format
+                timeout: 2000,	//Is useful ONLY if async=true. If async=false it is useless
+                async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+                success: function (data, textStatus, jqXHR) {
+                    alert("পণ্য বিক্রি হয়ে গেছে!")
+                    window.location.href = 'http://localhost:8080';
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR:" + jqXHR);
+                    console.log("TestStatus: " + textStatus);
+                    console.log("ErrorThrown: " + errorThrown);
+                    alert("বিক্রি গ্রহণযোগ্য নয়!");
+                    window.location.href = 'http://localhost:8080';
+                }
+            });
+
+
+                console.log(formData);
+        }
 
 
     </script>

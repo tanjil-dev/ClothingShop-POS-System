@@ -8,10 +8,6 @@ from django.core.files import File
 from barcode.writer import ImageWriter
 from django.core.exceptions import ValidationError
 
-CASH = 'CASH'
-CARD = 'CARD'
-MOBILE_BANKING = 'MOBILE_BANKING'
-PAYMENT_TYPE = [(CASH, CASH), (CARD, CARD), (MOBILE_BANKING, MOBILE_BANKING)]
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
@@ -92,11 +88,11 @@ class Expense(models.Model):
 class Sell(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.FloatField(default=0)
-    discount_amount = models.PositiveIntegerField(default=None, blank=False)
-    payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE, default=PAYMENT_TYPE[0][0])
+    discount_amount = models.PositiveIntegerField(default=0, blank=False)
+    after_discount = models.PositiveIntegerField(blank=False)
+    payment_type = models.CharField(max_length=20)
     received_amount = models.FloatField(default=0)
     change_amount = models.FloatField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class ProductSellLog(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -4,6 +4,7 @@ from myShop.forms.main_form import *
 from  django.views import View
 from myShop.forms import *
 from myShop.filters import *
+from datetime import datetime as dt
 
 
 class Home(View):
@@ -78,7 +79,7 @@ class SalesList(View):
     template_name = 'myShop/sales-list.html'
 
     def get(self, request):
-        data = Sell.objects.all()
+        data = Sell.objects.all().order_by('-id').values()
         context = {
             'data': data
         }
@@ -123,7 +124,7 @@ class PurchaseList(View):
     template_name = 'myShop/purchase-list.html'
 
     def get(self, request):
-        data = Purchase.objects.all()
+        data = Purchase.objects.all().order_by('-id').values()
         context = {
             'data': data
         }
@@ -248,7 +249,7 @@ class SupplierList(View):
     template_name = 'myShop/supplier-list.html'
 
     def get(self, request):
-        data = Supplier.objects.all()
+        data = Supplier.objects.all().order_by('-id').values()
         context = {
             'data': data
         }
@@ -327,5 +328,35 @@ class PrintBarcode(View):
         context = {
             'data': data,
             'myFilter': myFilter,
+        }
+        return render(request, context=context, template_name=self.template_name)
+
+class Report(View):
+    template_name = 'myShop/report.html'
+
+    def get(self, request):
+        date_all = dt.now()
+        day = date_all.day
+        month = date_all.month
+        year = date_all.year
+        print(day)
+        print(month)
+        print(year)
+        sell_today = 0
+        sell_month = 0
+        sell_year = 0
+        data_a = Sell.objects.filter(created_at__day=str(day))
+        data_b = Sell.objects.filter(created_at__month=str(month))
+        data_c = Sell.objects.filter(created_at__year=str(year))
+        for d in data_a:
+            sell_today = sell_today + d.after_discount
+        for d in data_b:
+            sell_month = sell_month + d.after_discount
+        for d in data_c:
+            sell_year = sell_year + d.after_discount
+        context = {
+            'sell_today': sell_today,
+            'sell_month': sell_month,
+            'sell_year': sell_year,
         }
         return render(request, context=context, template_name=self.template_name)

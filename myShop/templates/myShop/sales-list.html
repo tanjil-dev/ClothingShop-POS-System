@@ -11,28 +11,24 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Product</th>
                         <th>Created At</th>
                         <th>Total Price</th>
                         <th>Discount Amount</th>
                         <th>Payment Type</th>
                         <th>Received Amount</th>
                         <th>Change Amount</th>
-                        <th>User</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Product</th>
                         <th>Created At</th>
                         <th>Total Price</th>
                         <th>Discount Amount</th>
                         <th>Payment Type</th>
                         <th>Received Amount</th>
                         <th>Change Amount</th>
-                        <th>User</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </tfoot>
@@ -41,14 +37,12 @@
                     {% for d in data %}
                         <tr>
                             <td>{{ d.id }}</td>
-                            <td>{{ d.product }}</td>
                             <td>{{ d.created_at }}</td>
                             <td>{{ d.total_price }}</td>
                             <td>{{ d.discount_amount }}</td>
                             <td>{{ d.payment_type }}</td>
                             <td>{{ d.received_amount }}</td>
                             <td>{{ d.change_amount }}</td>
-                            <td>{{ d.user }}</td>
                             <td>
                                 <a href="{% url 'sells-update' d.id %}" class="btn btn-primary btn-circle">
                                     <i class="fa fa-pen"></i>

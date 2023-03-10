@@ -37,6 +37,10 @@ urlpatterns = [
     path('supplier/<str:id>/', SupplierUpdate.as_view(), name= 'supplier-update'),
     path('supplier/<str:id>/', SupplierDelete.as_view(), name= 'supplier-delete'),
 
+    #report
+    path('report', Report.as_view(), name= 'report'),
+
     #apis
     path('get-product/', ProductAPI.as_view(), name='get-product'),
+    path('sell-product/', SellProductAPI.as_view(), name='sell-product'),
 ]
