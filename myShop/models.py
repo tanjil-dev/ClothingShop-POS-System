@@ -35,7 +35,7 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True)
     bar_code = models.ImageField(null=True, blank=True)
     bar_code_no = models.CharField(max_length=13,blank=True, null=True)
-    company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default=None)
+    company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True)
     category = models.ForeignKey(ClothesCategory, on_delete=models.CASCADE, default=None)
     buying_price = models.FloatField(default=0)
     selling_price = models.FloatField(default=0)

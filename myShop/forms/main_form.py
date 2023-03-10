@@ -23,6 +23,16 @@ class SellsForm(forms.ModelForm):
     class Meta:
         model = Sell
         fields = ('__all__')
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ('__all__')
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = ClothesCategory
+        fields = ('__all__')
 class PurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase

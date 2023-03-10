@@ -360,3 +360,39 @@ class Report(View):
             'sell_year': sell_year,
         }
         return render(request, context=context, template_name=self.template_name)
+
+class CreateCompany(View):
+    template_name = 'myShop/create-company.html'
+    my_form = CompanyForm()
+    def get(self, request):
+        context = {
+            'form': self.my_form
+        }
+        return render(request, context=context, template_name=self.template_name)
+    def post(self, request):
+        form = CompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        context = {
+            "msg": "Company %s has been created"%form.cleaned_data['name'],
+            "form": self.my_form
+        }
+        return render(request, context=context, template_name=self.template_name)
+
+class CreateCategory(View):
+    template_name = 'myShop/create-category.html'
+    my_form = CategoryForm()
+    def get(self, request):
+        context = {
+            'form': self.my_form
+        }
+        return render(request, context=context, template_name=self.template_name)
+    def post(self, request):
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        context = {
+            "msg": "Category %s has been created"%form.cleaned_data['type'],
+            "form": self.my_form
+        }
+        return render(request, context=context, template_name=self.template_name)

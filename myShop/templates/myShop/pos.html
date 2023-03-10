@@ -226,14 +226,14 @@
                 async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
                 success: function (data, textStatus, jqXHR) {
                     alert("পণ্য বিক্রি হয়ে গেছে!")
-                    window.location.href = 'http://localhost:8080';
+                    window.location.href = 'http://localhost:8000';
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("jqXHR:" + jqXHR);
                     console.log("TestStatus: " + textStatus);
                     console.log("ErrorThrown: " + errorThrown);
                     alert("বিক্রি গ্রহণযোগ্য নয়!");
-                    window.location.href = 'http://localhost:8080';
+                    window.location.href = 'http://localhost:8000';
                 }
             });
 
