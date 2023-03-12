@@ -20,9 +20,6 @@ class Company(models.Model):
 
 class ClothesCategory(models.Model):
     type = models.CharField(max_length=50)
-    category: models.CharField(max_length=50)
-    unit = models.CharField(max_length=50)
-    quantity = models.PositiveIntegerField(default=None, blank=False)
 
     def __str__(self):
         return self.type
@@ -36,7 +33,7 @@ class Product(models.Model):
     bar_code = models.ImageField(null=True, blank=True)
     bar_code_no = models.CharField(max_length=13,blank=True, null=True)
     company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    category = models.ForeignKey(ClothesCategory, on_delete=models.CASCADE, default=None)
+    category = models.ForeignKey(ClothesCategory, on_delete=models.CASCADE, default=None, blank=True, null=True)
     buying_price = models.FloatField(default=0)
     selling_price = models.FloatField(default=0)
     quantity = models.PositiveIntegerField(default=None, blank=False)
