@@ -38,9 +38,9 @@
 
                             {% for d in data %}
                                 <tr>
-                                    <td colspan="3"><span style="padding-left: 30px">{{ d.name }}</span><br>
-                                        <img src="{{ d.bar_code }}" height="100" widht="100"><br>
-                                        <span style="padding-left: 30px">TK: {{ d.selling_price }}</span>
+                                    <td><span style="padding-left: 15px; font-size: 5px;">Anondo Mela | {{ d.name }}</span><br>
+                                        <img src="{{ d.bar_code }}" height="50" widht="80">
+                                        <br><span style="padding-left: 15px; font-size: 5px;">TK: {{ d.selling_price }}</span>
                                     </td>
                                 </tr>
                             {% endfor %}
