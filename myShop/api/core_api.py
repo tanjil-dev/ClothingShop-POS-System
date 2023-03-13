@@ -34,7 +34,7 @@ class SellProductAPI(APIView):
         json.loads(product_id)
         print(type(product_id))
         num = re.findall(r'\d+', product_id)
-        if len(received_amount) == 0 or len(discount) == 0:
+        if len(received_amount) == 0:
             return Response("Sell Incomplete", status=status.HTTP_405_METHOD_NOT_ALLOWED)
         else:
             data = Sell.objects.create(total_price=total, discount_amount=discount, payment_type=payment_type,

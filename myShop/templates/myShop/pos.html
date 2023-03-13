@@ -24,6 +24,57 @@
         #tab #barcodeTable tbody tr td{
             text-align: center;
         }
+
+
+        * {
+            font-size: 12px;
+            font-family: 'Times New Roman';
+        }
+
+        td,
+        th,
+        tr,
+        table {
+            border-top: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        td.description,
+        th.description {
+            width: 75px;
+            max-width: 75px;
+        }
+
+        td.quantity,
+        th.quantity {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        td.price,
+        th.price {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        .centered {
+            text-align: center;
+            align-content: center;
+        }
+
+        .ticket {
+            width: 155px;
+            max-width: 155px;
+        }
+
+        @media print {
+            .hidden-print,
+            .hidden-print * {
+                display: none !important;
+            }
+        }
     </style>
     <script src="{% static 'js/demo/barcode.js' %}"></script>
 
@@ -38,7 +89,7 @@
                 <div id="result">Result Here</div>
 
             </div>
-            <div id="tab" class="col-md-8">
+            <div class="col-md-8">
                 <table id="barcodeTable" class="table table-bordered border-primary">
                     <thead>
                     <tr>
@@ -92,11 +143,67 @@
                     </tfoot>
                 </table>
                 <br>
-                <input type="button" value="Sell"
-                       id="btPrint" class="btn btn-success" onclick="createPDF()" />
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                    Sell
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">বিক্রয় নিশ্চিত করুন</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="ticket" id="tab">
+                        <p class="centered"><b>ANANDA MELA
+                            <br>FASHION HOUSE</b>
+                            <br><b>Address:</b> Ekta Tower,
+                            <br>2nd Floor Shop No-207,
+                            <br>210, 218 3 215 Konabari,
+                            <br>Gazipur Mahanagar
+                            <br>Jh Mohsin Dhali
+                            <br><b>Moba:</b> 01717-263081
+                            <br>and 01922991188
+                        </p>
+                        <table class="sellConfirm" id="sellConfirm">
+                            <thead>
+                            <tr>
+                                <th class="quantity">N0.</th>
+                                <th class="description">Name</th>
+                                <th class="price">৳৳</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+
+                            </tr>
+                            <tr>
+                                <td class="quantity"></td>
+                                <td class="description">TOTAL</td>
+                                <td class="priceTotal"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p class="centered">Thanks for your
+                            <br>purchase!</p>
+                    </div>
+                    {#                    <button id="btnPrint" class="hidden-print">প্রিন্ট</button>#}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button onclick="createPDF()" type="button" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function receivedTotal() {
             $(document).ready(function() {
@@ -104,6 +211,7 @@
                 const b = $('#barcodeTable tfoot tr .after-discount').text();
                 $('#barcodeTable tfoot tr .change-amount').html(a-b);
                 $('#barcodeTable tfoot tr .received-amount-text').text(a)
+                $('#sellConfirm tbody tr .priceTotal').text(b)
                 console.log(d);
             });
         }
@@ -116,6 +224,7 @@
                 const b = $('#barcodeTable tfoot tr .total-amount').text();
                 $('#barcodeTable tfoot tr .after-discount').html(b-a);
                 $('#barcodeTable tfoot tr .discount-amount-text').text(a)
+                $('#sellConfirm tbody tr .priceTotal').text(b-a)
                 console.log(d);
             });
         }
@@ -133,6 +242,7 @@
 
                     if(data.quantity > 0) {
                         $('#barcodeTable tbody tr:last').after('<tr><td class="counterCell"></td> <td style="display: none" class="id-product">' + data.id + '</td> <td>' + data.name + '</td> <td style="display: none" " class="barcode-no">' + data.bar_code_no + '</td> <td style="display: none">' + data.quantity + '</td> </td> <td class="total">' + data.selling_price + '</td> </tr');
+                        $('#sellConfirm tbody tr:last').before('<tr><td class="counterCell"></td> <td>' + data.name + '</td> <td class="total">' + data.selling_price + '</td> </tr');
                         $('#barcodeTable tbody tr .barcode-no').each( function(){
                             //add item to array
                             items.push( $(this).text() );
@@ -177,9 +287,11 @@
 
         function createPDF() {
             var sTable = document.getElementById('tab').innerHTML;
-
+            var a1 = $('#barcodeTable tbody tr .barcode-no').html();
+            console.log(a1)
             var style = "<style>";
-            style = style + "table {width: 700; font: 17px Calibri;}";
+            style = style + "table {width: 300px; font: 17px Calibri;}";
+            style = style + "table {width: 300px; height: fit-content;}";
             style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
             style = style + "padding: 2px 3px;text-align: center;}";
             style = style + "</style>";
@@ -187,23 +299,23 @@
             // CREATE A WINDOW OBJECT.
             var win = window.open('', '', 'height=700,width=700');
 
-            win.document.write('<html><head>');
-            win.document.write('<title>Payment Receipt</title>');   // <title> FOR PDF HEADER.
-            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
-            win.document.write('</head>');
-            win.document.write('<body>');
-            win.document.write('<h3  align="center">ANANDA MELA FASHION HOUSE <h3>')
-            win.document.write('<h4   align="center">Ekta Tower, 2nd Floor Shop No-207, 210, 218 3 215 Konabari,<br> Gazipur Mahanagar Jh Mohsin Dhali <br> Moba: 01717-263081 and 01922991188</h4>')
+
+            win.document.write('<title>Payment Receipt_'+a1+'</title>');   // <title> FOR PDF HEADER.
+                     // ADD STYLE INSIDE THE HEAD TAG.
+
+
+
             win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-            win.document.write('<p class="centered">Thanks for your purchase!</p>');         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-            win.document.write('</body></html>');
+
 
             win.document.close(); 	// CLOSE THE CURRENT WINDOW.
 
             win.print();    // PRINT THE CONTENTS.
             sell();
         }
-
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
         function sell(){
             var product_id=[];
             var total = $(".total-amount").text();
@@ -212,13 +324,13 @@
             var received_amount = $(".received-amount-text").text();
             var change_amount = $(".change-amount").text();
             var payment_type = $(".payment").val();
-            $('#tab #barcodeTable tbody tr .id-product').each( function(){
+            $('#barcodeTable tbody tr .id-product').each( function(){
                 //add item to array
                 id = parseInt($(this).text());
                 product_id.push(id);
             });
             var formData = {total: total, discount: discount, after_discount: after_discount, received_amount: received_amount, change_amount: change_amount, payment_type: payment_type, product_id: JSON.stringify(product_id)}; //Array
-                $.ajax({
+            $.ajax({
                 url: sell_product,
                 type: "POST", // data type (can be get, post, put, delete)
                 data: formData, // data in json format
@@ -238,7 +350,7 @@
             });
 
 
-                console.log(formData);
+            console.log(formData);
         }
 
 
