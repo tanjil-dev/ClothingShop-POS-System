@@ -143,7 +143,7 @@
                     </tfoot>
                 </table>
                 <br>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                <button id="get-sell" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
                     Sell
                 </button>
             </div>
@@ -175,7 +175,6 @@
                         <table class="sellConfirm" id="sellConfirm">
                             <thead>
                             <tr>
-                                <th class="quantity">N0.</th>
                                 <th class="description">Name</th>
                                 <th class="price">৳৳</th>
                             </tr>
@@ -185,16 +184,30 @@
 
                             </tr>
                             <tr>
-                                <td class="quantity"></td>
                                 <td class="description">TOTAL</td>
                                 <td class="priceTotal"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Discount</td>
+                                <td class="priceDiscount"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">After Discount</td>
+                                <td class="priceDiscountTotal"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Received Amount</td>
+                                <td class="priceReceived"></td>
+                            </tr>
+                            <tr>
+                                <td class="description">Change Amount</td>
+                                <td class="priceChange"></td>
                             </tr>
                             </tbody>
                         </table>
                         <p class="centered">Thanks for your
                             <br>purchase!</p>
                     </div>
-                    {#                    <button id="btnPrint" class="hidden-print">প্রিন্ট</button>#}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -205,13 +218,49 @@
     </div>
 
     <script>
+{#    $('#get-sell').click(function(){#}
+{#$.ajax({#}
+{#        url: "Url",#}
+{#        dataType: "json",#}
+{#        type: "get",#}
+{#        success: function (data) {#}
+{#                #}
+{#        },#}
+{#        error: function (xhr, exception, thrownError) {#}
+{#            var msg = "";#}
+{#            if (xhr.status === 0) {#}
+{#                msg = "Not connect.\n Verify Network.";#}
+{#            } else if (xhr.status == 404) {#}
+{#                msg = "Requested page not found. [404]";#}
+{#            } else if (xhr.status == 500) {#}
+{#                msg = "Internal Server Error [500].";#}
+{#            } else if (exception === "parsererror") {#}
+{#                msg = "Requested JSON parse failed.";#}
+{#            } else if (exception === "timeout") {#}
+{#                msg = "Time out error.";#}
+{#            } else if (exception === "abort") {#}
+{#                msg = "Ajax request aborted.";#}
+{#            } else {#}
+{#                msg = "Error:" + xhr.status + " " + xhr.responseText;#}
+{#            }#}
+{#            if (callbackError) {#}
+{#                callbackError(msg);#}
+{#            }#}
+{#           #}
+{#        }#}
+{#    }); #}
+{#    });#}
         function receivedTotal() {
             $(document).ready(function() {
                 var a = $('#barcodeTable tfoot tr .received-amount input').val();
                 const b = $('#barcodeTable tfoot tr .after-discount').text();
-                $('#barcodeTable tfoot tr .change-amount').html(a-b);
-                $('#barcodeTable tfoot tr .received-amount-text').text(a)
-                $('#sellConfirm tbody tr .priceTotal').text(b)
+                const c = $('#barcodeTable tfoot tr .total-amount').text();
+                var e = $('#barcodeTable tfoot tr .change-amount').html(a-b);
+                $('#barcodeTable tfoot tr .received-amount-text').text(a);
+                $('#sellConfirm tbody tr .priceDiscountTotal').text(b);
+                $('#sellConfirm tbody tr .priceTotal').text(c);
+                $('#sellConfirm tbody tr .priceReceived').text(a);
+                $('#sellConfirm tbody tr .priceChange').text(e.text());
                 console.log(d);
             });
         }
@@ -223,8 +272,10 @@
                 var a = $('#barcodeTable tfoot tr .discount-amount input').val();
                 const b = $('#barcodeTable tfoot tr .total-amount').text();
                 $('#barcodeTable tfoot tr .after-discount').html(b-a);
-                $('#barcodeTable tfoot tr .discount-amount-text').text(a)
-                $('#sellConfirm tbody tr .priceTotal').text(b-a)
+                var c = $('#barcodeTable tfoot tr .discount-amount-text').text(a);
+                $('#sellConfirm tbody tr .priceDiscountTotal').text(b-a);
+                $('#sellConfirm tbody tr .priceTotal').text(b);
+                $('#sellConfirm tbody tr .priceDiscount').text(c.text());
                 console.log(d);
             });
         }
@@ -242,7 +293,7 @@
 
                     if(data.quantity > 0) {
                         $('#barcodeTable tbody tr:last').after('<tr><td class="counterCell"></td> <td style="display: none" class="id-product">' + data.id + '</td> <td>' + data.name + '</td> <td style="display: none" " class="barcode-no">' + data.bar_code_no + '</td> <td style="display: none">' + data.quantity + '</td> </td> <td class="total">' + data.selling_price + '</td> </tr');
-                        $('#sellConfirm tbody tr:last').before('<tr><td class="counterCell"></td> <td>' + data.name + '</td> <td class="total">' + data.selling_price + '</td> </tr');
+                        $('#sellConfirm tbody tr:first').after('<tr><td>' + data.name + '</td> <td class="total">' + data.selling_price + '</td> </tr');
                         $('#barcodeTable tbody tr .barcode-no').each( function(){
                             //add item to array
                             items.push( $(this).text() );
@@ -309,9 +360,8 @@
 
 
             win.document.close(); 	// CLOSE THE CURRENT WINDOW.
-
-            win.print();    // PRINT THE CONTENTS.
             sell();
+            win.print();    // PRINT THE CONTENTS.
         }
         $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
@@ -338,6 +388,7 @@
                 async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
                 success: function (data, textStatus, jqXHR) {
                     alert("পণ্য বিক্রি হয়ে গেছে!")
+                    console.log(data)
                     window.location.href = 'http://localhost:8000';
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
