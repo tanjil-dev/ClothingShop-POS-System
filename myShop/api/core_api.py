@@ -42,4 +42,4 @@ class SellProductAPI(APIView):
                                        after_discount=after_discount)
             for i in num:
                 ProductSellLog.objects.create(sell_id=data.id, product_id=i)
-            return Response(data={'sell-id': data.id, 'sell-time': data.created_at}, status=status.HTTP_201_CREATED)
+            return Response("Sell Success", status=status.HTTP_201_CREATED)
