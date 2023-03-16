@@ -73,7 +73,7 @@ class ProductDelete(View):
     def post(self, request, id):
         data = Product.objects.get(id=id)
         data.delete()
-        return redirect('product-list')
+        return redirect('cloth-list')
 
 class SalesList(View):
     template_name = 'myShop/sales-list.html'
