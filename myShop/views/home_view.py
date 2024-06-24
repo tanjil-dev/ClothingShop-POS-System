@@ -388,7 +388,7 @@ class CreateCategory(View):
         }
         return render(request, context=context, template_name=self.template_name)
     def post(self, request):
-        form = CategoryForm(request.POST, request.FILES)
+        form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
         context = {
