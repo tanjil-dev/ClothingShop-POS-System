@@ -3,32 +3,28 @@
 {% block 'content' %}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Sales List</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Expense List</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Created At</th>
+                        <th>User</th>
+                        <th>Details</th>
                         <th>Total Price</th>
-                        <th>Discount Amount</th>
-                        <th>Payment Type</th>
-                        <th>Received Amount</th>
-                        <th>Change Amount</th>
+                        <th>Created At</th>
+                        <th>Attached Image</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>ID</th>
-                        <th>Created At</th>
+                        <th>User</th>
+                        <th>Details</th>
                         <th>Total Price</th>
-                        <th>Discount Amount</th>
-                        <th>Payment Type</th>
-                        <th>Received Amount</th>
-                        <th>Change Amount</th>
+                        <th>Created At</th>
+                        <th>Attached Image</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </tfoot>
@@ -36,18 +32,18 @@
 
                     {% for d in data %}
                         <tr>
-                            <td>{{ d.id }}</td>
-                            <td>{{ d.created_at }}</td>
+                            <td>{{ d.user }}</td>
+                            <td>{{ d.details }}</td>
                             <td>{{ d.total_price }}</td>
-                            <td>{{ d.discount_amount }}</td>
-                            <td>{{ d.payment_type }}</td>
-                            <td>{{ d.received_amount }}</td>
-                            <td>{{ d.change_amount }}</td>
+                            <td>{{ d.created_at }}</td>
                             <td>
-                                <a href="{% url 'sells-update' d.id %}" class="btn btn-primary btn-circle">
+                                <img src="{{ d.attached_image }}" height="250" widht="250">
+                            </td>
+                            <td>
+                                <a href="{% url 'expense-update' d.id %}" class="btn btn-primary btn-circle">
                                     <i class="fa fa-pen"></i>
                                 </a>
-                                <a href="{% url 'sells-delete' d.id %}" class="btn btn-danger btn-circle">
+                                <a href="{% url 'expense-delete' d.id %}" class="btn btn-danger btn-circle">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>

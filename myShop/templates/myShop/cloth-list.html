@@ -13,8 +13,11 @@
                         <th>Name</th>
                         <th>Image</th>
                         <th>Bar Code</th>
-                        <th>Company Name</th>
-                        <th>Category</th>
+                        <th>Bar Code No.</th>
+                        <th>Buying Price</th>
+                        <th>Selling Price</th>
+                        <th>Quantity</th>
+                        <th>Created At</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </thead>
@@ -23,8 +26,11 @@
                         <th>Name</th>
                         <th>Image</th>
                         <th>Bar Code</th>
-                        <th>Company Name</th>
-                        <th>Category</th>
+                        <th>Bar Code No.</th>
+                        <th>Buying Price</th>
+                        <th>Selling Price</th>
+                        <th>Quantity</th>
+                        <th>Created At</th>
                         <th>Edit/Delete</th>
                     </tr>
                     </tfoot>
@@ -34,13 +40,16 @@
                         <tr>
                             <td>{{ d.name }}</td>
                             <td>
-                                <img src="{{ d.image }}" height="250" widht="250">
+                                <img src="{{ d.image }}" height="100" widht="100">
                             </td>
                             <td>
-                                <img src="{{ d.bar_code }}" height="250" widht="250">
+                                <img src="{{ d.bar_code }}" height="100" widht="100">
                             </td>
-                            <td>{{ d.company_name }}</td>
-                            <td>{{ d.category }}</td>
+                            <td>{{ d.bar_code_no }}</td>
+                            <td>{{ d.buying_price }}</td>
+                            <td>{{ d.selling_price }}</td>
+                            <td>{{ d.quantity }}</td>
+                            <td>{{ d.created_at }}</td>
                             <td>
                                 <a href="{% url 'product-update' d.id %}" class="btn btn-primary btn-circle">
                                     <i class="fa fa-pen"></i>
